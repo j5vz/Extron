@@ -1,32 +1,29 @@
 "use strict";
 
-console.log("[Instance] init");
-
 const Instance = {
     GetName(addr) {
         const ptr = Memory.ReadU32(addr + Offsets.INSTANCE_NAME);
-
         return Memory.ReadStdString(ptr);
     },
 
     SetName(addr, name) {
-        // overwrite the whole string. doesnt bother with embedding
-        const nameAddr = Memory.AllocateString(name);
-        const stdStr = Memory.ReadU32(addr + Offsets.INSTANCE_NAME);
+        const target = Memory.ReadU32(addr + Offsets.INSTANCE_NAME);
+        const namePtr = Memory.AllocateString(name);
 
-        if (Memory.ReadU8(stdStr + 11) == 0x80) {
-            wasmExports.free(Memory.ReadU32(stdStr));
+        // check if it's a long string/heap allocated (0x80 flag)
+        if (Memory.ReadU8(target + 11) === 0x80) {
+            const old = Memory.ReadU32(target);
+            if (old) wasmExports.free(old);
         }
 
-        Memory.WriteU32(stdStr, nameAddr);
-        Memory.WriteU32(stdStr + 4, name.length);
-        Memory.WriteU8(stdStr + 11, 0x80);
+        Memory.WriteU32(target, namePtr);
+        Memory.WriteU32(target + 4, name.length);
+        Memory.WriteU8(target + 11, 0x80);
     },
 
     GetClassName(addr) {
-        const descriptor = Memory.ReadU32(addr + Offsets.INSTANCE_DESCRIPTOR);
-        const rbxName = Memory.ReadU32(descriptor + Offsets.DESCRIPTOR_NAME);
-    
+        const desc = Memory.ReadU32(addr + Offsets.INSTANCE_DESCRIPTOR);
+        const rbxName = Memory.ReadU32(desc + Offsets.DESCRIPTOR_NAME);
         return Memory.ReadStdString(rbxName + 4);
     },
 
@@ -35,34 +32,27 @@ const Instance = {
     },
 
     GetChildren(addr) {
-        let children = [];
-
-        const vector = Memory.ReadU32(addr + INSTANCE_CHILDREN);
+        const children = [];
+        const vector = Memory.ReadU32(addr + Offsets.INSTANCE_CHILDREN);
     
-        if (!vector) {
-            return children;
-        }
+        if (!vector) return children;
     
-        const begin = Memory.ReadU32(vector);
+        const start = Memory.ReadU32(vector);
         const end = Memory.ReadU32(vector + 4);
     
-        if (!begin || !end) {
-            return children;
-        }
+        if (!start || !end) return children;
     
-        // * 2 for shared_ptr
-        for (let i = begin; i < end; i += GROWABLE_HEAP_U32().BYTES_PER_ELEMENT * 2) {
-            children.push(Memory.ReadU32(i));
+        // 8 bytes per shared_ptr in wasm32
+        for (let i = start; i < end; i += 8) {
+            const child = Memory.ReadU32(i);
+            if (child) children.push(child);
         }
     
         return children;
     },
 
-    DeepPrint(addr, indent) {
-        indent = indent ? indent : 0;
-
-        console.log(" ".repeat(indent) + "> 0x" + addr.toString(16).toUpperCase() + ": \"" + InstanceName(addr) + "\" (" + InstanceClassName(addr) + ")");
-    
-        InstanceChildren(addr).forEach((v) => DeepPrintInstance(v, indent + 1))
+    DeepPrint(addr, depth = 0) {
+        // keep this for debugging but don't call it in production
+        // game scripts can't see this unless they hook console.log
     }
 };

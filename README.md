@@ -1,15 +1,7 @@
 ![Proof-of-concept working exploit](https://github.com/Vector4-new/ecsr-web-executor/blob/5de6c24d4870b63e8a6219cb85db1ef1511d9bfe/poc.png?raw=true)
 
 # **!!! UNFINISHED !!!**
-I am not continuing this project.  
-ECS:R is dead bro  
-Open button doesn't work.  
-Basically no custom functions, and I don't even know if the ones implemented work  
-
-Web executor for ECS:R.  
-Not responsible if this gets you banned.  
-Won't be maintained; it's already enough of a headache to develop.  
-Has custom functions, but not really.  
+Extron is based off another open-source executor. Go check them out, as the repository is an direct fork. I'm working on making it undetected, meanhile the forked executor is detected & discontinued.  
 
 ## Loading
 Turn on developer mode.  
@@ -18,7 +10,7 @@ Make sure the extension is turned on.
 When you join a game, just open the extension window from the extensions list and run your code.  
 
 ## Updating
-This was and is a fucking nightmare to work on.  
+This was and is a fucking nightmare to work on. (for me too))
 Good luck.  
 No exceptions.  
 No function names.  

@@ -1,4 +1,5 @@
-
+// holy shit how many fucking comments are thre? good luck reading through this shit oh my god
+// –Nex
 
 // The Module object: Our interface to the outside world. We import
 // and export values on it. There are various ways Module can be used:
@@ -5845,3 +5846,5 @@ chrome.runtime.onMessage.addListener(({ type, code, source }, sender, sendRespon
     });
   }
 });
+
+// thank you to WHOEVER bothered writing this shit bro istg

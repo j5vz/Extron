@@ -1,26 +1,20 @@
 {
     "manifest_version": 3,
-
-    "name": "ECS:R Web Client Executor",
-    "description": "A simple web executor for Economy Simulator: Reborn.",
-    "version": "0.0.0",
-
+    "name": "Extron",
+    "description": "ECS:R Executor.",
+    "version": "1.0.4",
     "action": { 
         "default_popup": "executor.html"
     },
-
     "permissions": [ "scripting", "tabs" ],
     "host_permissions": [ "https://ecsr.io/WebPlayer*" ],
-
     "content_security_policy": {
         "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
     },
-
     "background": {
         "service_worker": "compiler.js",
         "type": "module"
     },
-
     "content_scripts": [
         {
             "matches": [ "https://ecsr.io/WebPlayer*" ],
@@ -29,7 +23,15 @@
         },
         {
             "matches": [ "https://ecsr.io/WebPlayer*" ],
-            "js": [ "inject/offsets.js", "inject/bytecode.js", "inject/memory.js", "inject/instance.js", "inject/lua.js", "inject/custom.js", "inject/main.js" ],
+            "js": [ 
+                "inject/offsets.js", 
+                "inject/bytecode.js", 
+                "inject/memory.js", 
+                "inject/instance.js", 
+                "inject/lua.js", 
+                "inject/custom.js", 
+                "inject/main.js" 
+            ],
             "world": "MAIN"
         }
     ]
