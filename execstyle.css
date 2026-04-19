@@ -41,3 +41,13 @@ body {
 .button-holder>button:active {
     background-color: #777;
 }
+
+* {
+    box-sizing: border-box; /* Prevents elements from stretching past the container */
+}
+
+#extron-root { 
+    width: 350px !important;
+    max-width: 90vw;
+    overflow: hidden; /* This should kill that weird line */
+}
